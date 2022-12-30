@@ -9,7 +9,7 @@ from datetime import datetime
 import feedparser
 
 intents=discord.Intents.all()
-intents.message_content = True
+intents.messages = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 # TOKENとチャンネルID
