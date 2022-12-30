@@ -1,27 +1,10 @@
----
-title: Discord Python bot
-description: A Discord bot written in Python
-tags:
-  - python
-  - discord.py
----
+# おいも用Discord bot 「Oimo-bot」
 
-# Discord.py Example
+「discord.py」を使用したDiscordbotです。🍠
 
-This example starts a Discord bot using [discord.py](https://discordpy.readthedocs.io/en/stable/).
 
-[![Deploy on Railway](https://railway.app/new/template/PxM3nl)
+## 機能
 
-## ✨ Features
+- 「Oimo」というと「おいも」と帰ってくる
+- ゴミ出しの通知
 
-- Python
-- Discord.py
-
-## 💁‍♀️ How to use
-
-- Install packages using `pip install -r requirements.txt`
-- Start the bot using `python main.py`
-
-## 📝 Notes
-
-This is a basic bot with the prefix `!`, more information can be founded at their [offical documentation](https://discordpy.readthedocs.io/en/stable/api.html).
