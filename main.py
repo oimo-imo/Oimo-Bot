@@ -1,4 +1,4 @@
-mport discord
+import discord
 import os
 from time import sleep
 from discord.ext import tasks
