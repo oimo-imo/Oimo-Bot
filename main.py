@@ -82,8 +82,7 @@ time_check.start()
 loop.start()
 
 
-# Botの起動とDiscordサーバーへの接続
-client.run(TOKEN)
+
 
 
 bot.run(os.environ["DISCORD_TOKEN"])
