@@ -1,16 +1,9 @@
+mport discord
 import os
-from lib2to3.pgen2.token import GREATER
-import schedule
-import discord
 from time import sleep
 from discord.ext import tasks
-from discord.ext import commands
 from datetime import datetime
-import feedparser
 
-intents=discord.Intents.all()
-intents.messages = True
-bot = commands.Bot(command_prefix='!', intents=intents)
 
 # TOKENとチャンネルID
 CHANNEL_ID=977891750653861898
@@ -31,7 +24,7 @@ async def on_message(message):
     # メッセージ送信者がBotだった場合は無視する
     if message.author.bot:
         return
-    # 「/neko」と発言したら「にゃーん」が返る処理
+    # 「oimo」と発言したら「おいも」が返る処理
     if message.content == 'oimo':
         await message.channel.send('おいも')
 
@@ -81,8 +74,5 @@ async def time_check():
 time_check.start()
 loop.start()
 
-
-
-
-
-bot.run(os.environ["DISCORD_TOKEN"])
+# Botの起動とDiscordサーバーへの接続
+client.run(os.environ["DISCORD_TOKEN"])
