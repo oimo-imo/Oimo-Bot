@@ -8,7 +8,7 @@ from discord.ext import commands
 from datetime import datetime
 import feedparser
 
-intents = discord.Intents.default()
+intents=discord.Intents.all()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
