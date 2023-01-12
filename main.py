@@ -3,13 +3,14 @@ import os
 from time import sleep
 from discord.ext import tasks
 from datetime import datetime
-
+from pytz import timezone
+import asyncio
 
 # TOKENとチャンネルID
 CHANNEL_ID=977891750653861898
 
 # 接続に必要なオブジェクトを生成
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.all())
 
 # 起動時に動作する処理
 @client.event
@@ -17,6 +18,15 @@ async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
     print('ログインしました')
     await greet()
+    loop.start()
+
+#起動したらおはよう！と言う
+async def greet():
+    channel = client.get_channel(CHANNEL_ID)
+    await channel.send('おはよう！')
+    
+
+# ▼▼▼ メッセージ送受信に関する機能 ▼▼▼
 
 # メッセージ受信時に動作する処理
 @client.event
@@ -28,19 +38,28 @@ async def on_message(message):
     if message.content == 'oimo':
         await message.channel.send('おいも')
 
-#起動したらおはよう！と言う
-async def greet():
-    channel = client.get_channel(CHANNEL_ID)
-    await channel.send('おはよう！')
+
+# ▼▼▼ここから時間に関する機能 ▼▼▼
 
 # 指定時間に走る処理
 @tasks.loop(seconds=60)
 async def loop():
     # 現在の時刻
-    now = datetime.now().strftime('%H:%M')
-    if now == '19:30':
+    now = datetime.now(timezone('Asia/Tokyo')).strftime('%H:%M')
+    if now in ['9:00','19:30','03:23']:
         channel = client.get_channel(CHANNEL_ID)
-        await channel.send('ゴミ出しに行けよ！')  
+        await channel.send('ゴミ出しに行こうね！')  
+
+
+
+
+"""
+async def fn():
+    await loop.start()
+
+loop_ = asyncio.get_event_loop()
+loop_.run_until_complete(loop())
+
 
 
 #次の日のゴミ出しの内容を毎日19時に通知
@@ -73,6 +92,10 @@ async def time_check():
 
 time_check.start()
 loop.start()
+"""
+
+
 
 # Botの起動とDiscordサーバーへの接続
 client.run(os.environ["DISCORD_TOKEN"])
+#client.run(TOKEN)
