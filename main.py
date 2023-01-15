@@ -19,6 +19,7 @@ async def on_ready():
     print('ログインしました')
     await greet()
     loop.start()
+    time_check.start()
 
 #起動したらおはよう！と言う
 async def greet():
@@ -41,25 +42,14 @@ async def on_message(message):
 
 # ▼▼▼ここから時間に関する機能 ▼▼▼
 
-# 指定時間に走る処理
+# 19時30分になったらゴミ出しに行こうねと通知
 @tasks.loop(seconds=60)
 async def loop():
     # 現在の時刻
     now = datetime.now(timezone('Asia/Tokyo')).strftime('%H:%M')
-    if now in ['9:00','19:30','03:23']:
+    if now.hour == 19 and now.minute == 30:
         channel = client.get_channel(CHANNEL_ID)
         await channel.send('ゴミ出しに行こうね！')  
-
-
-
-
-"""
-async def fn():
-    await loop.start()
-
-loop_ = asyncio.get_event_loop()
-loop_.run_until_complete(loop())
-
 
 
 #次の日のゴミ出しの内容を毎日19時に通知
@@ -68,7 +58,7 @@ loop_.run_until_complete(loop())
 async def time_check():
     sleepTime = 0
     # 現在の時刻
-    now = datetime()
+    now = datetime.now(timezone('Asia/Tokyo'))
     if now.weekday() == 6 and now.hour == 19 and now.minute == 0:
         channel = client.get_channel(CHANNEL_ID)
         await channel.send('月曜日は段ボールの日だよ！')  
@@ -89,13 +79,6 @@ async def time_check():
         await channel.send('土曜日は燃えるゴミの日だよ！')
     
 
-
-time_check.start()
-loop.start()
-"""
-
-
-
 # Botの起動とDiscordサーバーへの接続
-client.run(os.environ["DISCORD_TOKEN"])
 #client.run(TOKEN)
+client.run(os.environ["DISCORD_TOKEN"])
