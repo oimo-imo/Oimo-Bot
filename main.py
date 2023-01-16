@@ -47,14 +47,14 @@ async def on_message(message):
 async def loop():
     # 現在の時刻
     now = datetime.now(timezone('Asia/Tokyo')).strftime('%H:%M')
-    if now.hour == 19 and now.minute == 30:
+    if now.hour() == 19 and now.minute == 30:
         channel = client.get_channel(CHANNEL_ID)
         await channel.send('ゴミ出しに行こうね！')  
 
 
 #次の日のゴミ出しの内容を毎日19時に通知
 # 30秒に一回ループ
-@tasks.loop(seconds=30)
+@tasks.loop(seconds=60)
 async def time_check():
     sleepTime = 0
     # 現在の時刻
