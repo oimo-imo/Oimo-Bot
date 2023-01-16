@@ -4,10 +4,12 @@ from time import sleep
 from discord.ext import tasks
 from datetime import datetime
 from pytz import timezone
+import feedparser
 import asyncio
 
 # TOKENとチャンネルID
 CHANNEL_ID=977891750653861898
+CHANNEL_ID_rss=1064559798089154701
 
 # 接続に必要なオブジェクトを生成
 client = discord.Client(intents=discord.Intents.all())
@@ -20,6 +22,7 @@ async def on_ready():
     await greet()
     loop.start()
     time_check.start()
+    loop_rss.start()
 
 #起動したらおはよう！と言う
 async def greet():
@@ -46,8 +49,8 @@ async def on_message(message):
 @tasks.loop(seconds=60)
 async def loop():
     # 現在の時刻
-    now = datetime.now(timezone('Asia/Tokyo')).strftime('%H:%M')
-    if now.hour() == 19 and now.minute == 30:
+    now = datetime.now(timezone('Asia/Tokyo'))
+    if now.hour == 19 and now.minute == 30:
         channel = client.get_channel(CHANNEL_ID)
         await channel.send('ゴミ出しに行こうね！')  
 
@@ -77,8 +80,26 @@ async def time_check():
     elif now.weekday() == 4 and now.hour == 19 and now.minute == 0:
         channel = client.get_channel(CHANNEL_ID)
         await channel.send('土曜日は燃えるゴミの日だよ！')
-    
+
+
+#▼▼▼ 指定時間にRSSからニュースを通知する ▼▼▼
+RSS_URL = 'https://automaton-media.com/feed/' #AUTOMATONのRSS-URL
+news_list = []
+ 
+async def pickup():
+    d = feedparser.parse(RSS_URL)
+    for entry in d.entries:
+        print(entry.title, entry.link)
+        channel = client.get_channel(CHANNEL_ID_rss)
+        await channel.send(entry.title+ entry.link)
+        news_list.append(entry.title+ '\r\n'+ entry.link)
+
+@tasks.loop(seconds=60)
+async def loop_rss():
+    now = datetime.now()
+    if now.hour == 12 and now.minute == 00:
+        await pickup()
+
 
 # Botの起動とDiscordサーバーへの接続
-#client.run(TOKEN)
 client.run(os.environ["DISCORD_TOKEN"])
